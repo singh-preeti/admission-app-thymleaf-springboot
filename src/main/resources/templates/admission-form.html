@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Admission Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f2f5fb; margin: 0; padding: 28px; color: #243047; }
+        .container { max-width: 850px; margin: auto; }
+        .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 18px #00000012; margin-bottom: 22px; }
+        h1, h2 { color: #243f78; } label { display:block; margin-top: 13px; font-weight: bold; }
+        input, select { box-sizing: border-box; width:100%; padding:11px; margin-top:6px; border:1px solid #cbd3e1; border-radius:6px; }
+        button { margin-top:18px; padding:12px 18px; background:#2855a6; color:white; border:0; border-radius:6px; cursor:pointer; }
+        .success { background:#e7f8ed; color:#176b35; padding:12px; border-radius:6px; }
+        table { width:100%; border-collapse:collapse; } th,td { padding:10px; border-bottom:1px solid #e1e6ef; text-align:left; }
+        @media(max-width:600px){ body{padding:12px;} .card{padding:16px;} }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Student Admission Form</h1>
+        <p>Enter student details to register for a course.</p>
+        <div class="success" th:if="${param.success}">Admission submitted successfully!</div>
+        <form th:action="@{/admissions}" th:object="${admission}" method="post">
+            <label for="studentName">Student Name</label>
+            <input id="studentName" type="text" th:field="*{studentName}" required maxlength="100" placeholder="Enter full name">
+            <label for="email">Email</label>
+            <input id="email" type="email" th:field="*{email}" required placeholder="student@example.com">
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" th:field="*{phone}" required maxlength="20" placeholder="Enter phone number">
+            <label for="course">Course</label>
+            <select id="course" th:field="*{course}" required>
+                <option value="">-- Select a course --</option>
+                <option value="BE Computer Science">BE Computer Science</option>
+                <option value="BE Information Technology">BE Information Technology</option>
+                <option value="BE Mechanical">BE Mechanical</option>
+                <option value="BE Automobile">BE Automobile</option>
+            </select>
+            <button type="submit">Submit Admission</button>
+        </form>
+    </div>
+    <div class="card">
+        <h2>Submitted Admissions</h2>
+        <p th:if="${#lists.isEmpty(admissions)}">No admissions submitted yet.</p>
+        <table th:if="${not #lists.isEmpty(admissions)}">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Course</th></tr></thead>
+            <tbody><tr th:each="item : ${admissions}">
+                <td th:text="${item.id}"></td><td th:text="${item.studentName}"></td>
+                <td th:text="${item.email}"></td><td th:text="${item.phone}"></td><td th:text="${item.course}"></td>
+            </tr></tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
